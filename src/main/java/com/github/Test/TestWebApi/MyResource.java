@@ -1,5 +1,10 @@
 package com.github.Test.TestWebApi;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -10,6 +15,8 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("myresource")
 public class MyResource {
+	EntityManagerFactory fac = Persistence.createEntityManagerFactory("test");
+	EntityManager em = fac.createEntityManager();
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -18,8 +25,9 @@ public class MyResource {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return "Got it! to There!!";
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Testtable> getIt() {
+    	List<Testtable> customers = em.createQuery("SELECT c FROM Testtable c", Testtable.class).getResultList();
+        return customers;
     }
 }
